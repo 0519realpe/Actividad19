@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.HashMap;
@@ -10,17 +11,34 @@ public class Main {
     private static HashSet<String> catalogoMaterias = new HashSet<>();
     private static HashMap<String, ArrayList<Double>> registroCalificaciones = new HashMap<>();
 
-    public static void agregarEstudiante(Scanner sc) {
-        System.out.println("Ingrese nombre: ");
-        String nombre = sc.nextLine();
+    public static void agregarEstudiante(String nombre, String id) {
 
-        System.out.println("Ingrese ID: ");
-        String id = sc.nextLine();
+        if (nombre == null || nombre.trim().isEmpty()) {
+            throw new DatoVacioException("El nombre no puede estar vacio");
+        }
+        if (id == null || id.trim().isEmpty()) {
+            throw new DatoVacioException("El id no puede estar vacio");
+        }
 
-        Estudiante estudiante = new Estudiante(nombre, id);
-        listaEstudiantes.add(estudiante);
+        listaEstudiantes.add(new Estudiante(nombre, id));
 
         System.out.println("Estudiante agregado con exito");
+    }
+
+    public static void opcionAgregarEstudiante(){
+        try{
+            String nombre = JOptionPane.showInputDialog("Ingrese el nombre del estudiante");
+            String id = JOptionPane.showInputDialog("Ingrese el id del estudiante");
+
+            agregarEstudiante(nombre, id);
+
+            JOptionPane.showMessageDialog(null, "Estudiante agregado con exito");
+
+
+        } catch(DatoVacioException e){
+            JOptionPane.showMessageDialog(null, "Error " + e.getMessage());
+        }
+
     }
 
     public static void mostrarEstudiante() {
@@ -154,12 +172,12 @@ public class Main {
             System.out.println("8. Agregar Calificación ");
             System.out.println("9. Calcular Promedio ");
             System.out.println("0. Salir ");
-            System.out.println("SELECIONE UNA OPCION");
+            System.out.println("SELECIONE UNA OPCION: ");
             opcion = sc.nextInt();
             sc.nextLine(); // Limpiar el salto de línea restante
 
             switch (opcion) {
-                case 1 -> agregarEstudiante(sc);
+                case 1 -> opcionAgregarEstudiante();
                 case 2 -> mostrarEstudiante();
                 case 3 -> buscarEstudiante(sc);
                 case 4 -> eliminarEstudiante(sc);
